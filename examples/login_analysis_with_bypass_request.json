@@ -1,0 +1,17 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "case.run_login_analysis",
+    "arguments": {
+      "packageName": "com.example.app",
+      "classNames": ["com.example.app.LoginActivity"],
+      "methodNames": ["login", "onClick"],
+      "confirm": true,
+      "enableBypass": true,
+      "bypassProfiles": ["root-basic"],
+      "waitSeconds": 5
+    }
+  }
+}

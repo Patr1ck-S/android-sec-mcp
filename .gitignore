@@ -1,0 +1,38 @@
+# macOS / editor noise
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Go build/cache artifacts
+.gocache/
+build/
+*.test
+*.out
+
+# logs and temporary output
+*.log
+/tmp/
+
+# local config / secrets
+local_config.json
+config.json
+*.token
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.mobileprovision
+
+# generated Android/Magisk binaries
+magisk/system/bin/android-sec-mcp
+magisk/system/bin/frida-server
+
+# case exports / local analysis data
+cases/
+*.apk
+*.apks
+*.xapk

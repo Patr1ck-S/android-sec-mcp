@@ -1,0 +1,15 @@
+{
+  "bindAddr": "127.0.0.1:8765",
+  "token": "REPLACE_WITH_RANDOM_TOKEN",
+  "workspaceDir": "/data/local/tmp/android-sec-mcp/cases",
+  "dataDir": "/data/adb/android-sec-mcp",
+  "auditLogPath": "/data/adb/android-sec-mcp/audit.log",
+  "fridaServerPath": "/system/bin/frida-server",
+  "fridaCliPath": "",
+  "fridaHost": "127.0.0.1:27042",
+  "commandTimeoutSeconds": 30,
+  "maxLogcatLines": 500,
+  "ctfBypassEnabled": false,
+  "allowedBypassPackages": [],
+  "bypassProfilesDir": "/data/adb/android-sec-mcp/bypass-profiles"
+}

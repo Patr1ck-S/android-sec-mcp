@@ -1,0 +1,21 @@
+{
+  "name": "debugger-basic",
+  "description": "Target-scoped CTF profile for common Java debugger checks after explicit authorization.",
+  "scope": "target-package-runtime",
+  "allowedUse": "Only CTF, lab, self-owned apps, or explicitly authorized testing. Never global device patching.",
+  "protections": ["debugger_detection"],
+  "requiresConfirm": true,
+  "actions": [
+    {
+      "type": "java_return",
+      "description": "Debug.isDebuggerConnected() -> false in target package only.",
+      "className": "android.os.Debug",
+      "methodName": "isDebuggerConnected",
+      "returnType": "boolean",
+      "returnValue": false
+    }
+  ],
+  "revert": [
+    {"type": "detach", "description": "Detach the Frida session or call ctf.revert_bypass_profile."}
+  ]
+}

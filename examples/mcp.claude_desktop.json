@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "android-sec-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "http://127.0.0.1:8765/mcp",
+        "--header",
+        "Authorization: Bearer REPLACE_WITH_TOKEN_FROM_DEVICE"
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "case.run_basic_recon",
+    "arguments": {
+      "packageName": "com.example.app"
+    }
+  }
+}

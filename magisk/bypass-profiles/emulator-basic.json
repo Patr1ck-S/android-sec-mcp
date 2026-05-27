@@ -1,0 +1,18 @@
+{
+  "name": "emulator-basic",
+  "description": "Template profile placeholder for emulator detection labs. It logs scope and performs no property changes by default.",
+  "scope": "target-package-runtime",
+  "allowedUse": "Only CTF, lab, self-owned apps, or explicitly authorized testing. Never global device patching.",
+  "protections": ["emulator_detection"],
+  "requiresConfirm": true,
+  "actions": [
+    {
+      "type": "frida_script",
+      "description": "Observation-only placeholder.",
+      "script": "log('emulator-basic profile loaded; customize a target-specific app method hook in this JSON if authorized.');"
+    }
+  ],
+  "revert": [
+    {"type": "detach", "description": "Detach the Frida session or call ctf.revert_bypass_profile."}
+  ]
+}

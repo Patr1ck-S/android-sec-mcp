@@ -1,0 +1,21 @@
+{
+  "name": "root-basic",
+  "description": "Target-scoped CTF profile for simple Java boolean root-check methods after explicit authorization.",
+  "scope": "target-package-runtime",
+  "allowedUse": "Only CTF, lab, self-owned apps, or explicitly authorized testing. Never global device patching.",
+  "protections": ["root_detection"],
+  "requiresConfirm": true,
+  "actions": [
+    {
+      "type": "java_return",
+      "description": "Example hook: RootBeer.isRooted() -> false when the class exists in target process.",
+      "className": "com.scottyab.rootbeer.RootBeer",
+      "methodName": "isRooted",
+      "returnType": "boolean",
+      "returnValue": false
+    }
+  ],
+  "revert": [
+    {"type": "detach", "description": "Detach the Frida session or call ctf.revert_bypass_profile."}
+  ]
+}

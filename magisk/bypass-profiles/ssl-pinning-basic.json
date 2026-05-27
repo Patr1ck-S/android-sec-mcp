@@ -1,0 +1,18 @@
+{
+  "name": "ssl-pinning-basic",
+  "description": "Target-scoped CTF profile for common Java SSL pinning checks after explicit authorization.",
+  "scope": "target-package-runtime",
+  "allowedUse": "Only CTF, lab, self-owned apps, or explicitly authorized testing. Never global device patching.",
+  "protections": ["traffic_capture_detection"],
+  "requiresConfirm": true,
+  "actions": [
+    {
+      "type": "frida_script",
+      "description": "Best-effort Java SSL pinning bypass for common OkHttp/Conscrypt/HostnameVerifier paths in the target package only.",
+      "script": "try {\n  const CP = Java.use('okhttp3.CertificatePinner');\n  if (CP.check) {\n    CP.check.overloads.forEach(function (ov) {\n      ov.implementation = function () {\n        log('okhttp3.CertificatePinner.check bypass argc=' + arguments.length);\n        return;\n      };\n    });\n    log('hooked okhttp3.CertificatePinner.check');\n  }\n} catch (e) { log('CertificatePinner hook skipped: ' + e); }\n\ntry {\n  const TM = Java.use('com.android.org.conscrypt.TrustManagerImpl');\n  if (TM.checkTrustedRecursive) {\n    TM.checkTrustedRecursive.overloads.forEach(function (ov) {\n      ov.implementation = function () {\n        log('TrustManagerImpl.checkTrustedRecursive bypass');\n        return Java.use('java.util.ArrayList').$new();\n      };\n    });\n    log('hooked TrustManagerImpl.checkTrustedRecursive');\n  }\n  if (TM.verifyChain) {\n    TM.verifyChain.overloads.forEach(function (ov) {\n      ov.implementation = function () {\n        log('TrustManagerImpl.verifyChain bypass');\n        return arguments[0];\n      };\n    });\n    log('hooked TrustManagerImpl.verifyChain');\n  }\n} catch (e) { log('TrustManagerImpl hook skipped: ' + e); }\n\ntry {\n  const HV = Java.use('javax.net.ssl.HostnameVerifier');\n  log('HostnameVerifier is an interface; hook concrete verifier classes if needed.');\n} catch (e) { }\n"
+    }
+  ],
+  "revert": [
+    {"type": "detach", "description": "Detach the Frida session or call ctf.revert_bypass_profile."}
+  ]
+}
