@@ -5,5 +5,5 @@ cd "$ROOT/magisk"
 OUT="$ROOT/build/android-sec-mcp-magisk.zip"
 mkdir -p "$ROOT/build"
 rm -f "$OUT"
-zip -r "$OUT" module.prop service.sh uninstall.sh system bypass-profiles >/dev/null
+zip -r -X "$OUT" META-INF customize.sh module.prop service.sh uninstall.sh system bypass-profiles -x "system/bin/.gitkeep" >/dev/null
 echo "$OUT"

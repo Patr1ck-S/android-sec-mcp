@@ -1,6 +1,6 @@
 {
   "name": "frida-basic",
-  "description": "Template profile placeholder for Frida detection labs. It logs scope and performs no global hiding by default.",
+  "description": "Runtime profile for Frida detection labs. It logs scope and performs no global hiding by default.",
   "scope": "target-package-runtime",
   "allowedUse": "Only CTF, lab, self-owned apps, or explicitly authorized testing. Never global device patching.",
   "protections": ["frida_detection"],
@@ -8,7 +8,7 @@
   "actions": [
     {
       "type": "frida_script",
-      "description": "Observation-only placeholder.",
+      "description": "Observation-only action.",
       "script": "log('frida-basic profile loaded; no global frida hiding is performed. Add target-specific app hooks only when authorized.');"
     }
   ],

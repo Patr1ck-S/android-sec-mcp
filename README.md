@@ -172,7 +172,7 @@ curl -sS http://127.0.0.1:8765/mcp \
 
 ## MCP Client 配置示例
 
-### Cursor / Codex / 支持 remote HTTP MCP 的客户端
+### Cursor / 支持 remote HTTP MCP 的客户端
 
 ```json
 {
@@ -349,7 +349,7 @@ adb shell su -c 'tail -n 50 /data/adb/android-sec-mcp/audit.log'
 4. `/system/bin/frida-server`
 5. 模块内 `system/bin/frida-server`
 
-`magisk/system/bin/frida-server` 当前只是占位脚本。如果设备上没有已有的 `frida-server`，打包前再替换为与你设备 ABI 匹配的官方 `frida-server`：
+`magisk/system/bin/frida-server` 当前只是占位文件。如果设备上没有已有的 `frida-server`，打包前再替换为与你设备 ABI 匹配的官方 `frida-server`：
 
 ```bash
 cp /path/to/frida-server-android-arm64 magisk/system/bin/frida-server
@@ -383,7 +383,7 @@ pip install frida-tools
 
 如果 `fridaCliPath` 为空，daemon 会进入 PC-side mode：
 
-- Frida 脚本仍会生成到 case 目录
+- Frida 脚本会保存到 case 目录
 - MCP 返回结果中的 `pcMode.script` 会包含脚本内容
 - `pcMode.commands` 会给出：从设备导出 JS 到本地、attach 注入、spawn 早期注入命令
 
@@ -409,7 +409,7 @@ frida -U -p <PID> -l hook.js
 如果目标 App 在 `Application.attachBaseContext()`、`Application.onCreate()` 或更早阶段做 root/debug/frida 检测，普通 attach 可能太晚。此时使用 spawn 方式从 PC 端启动目标 App 并提前加载脚本：
 
 ```bash
-# 先从设备导出 MCP 生成的 JS 到本地 hook.js
+# 先从设备导出 MCP 保存的 JS 到本地 hook.js
 adb exec-out su -c "cat '/data/local/tmp/android-sec-mcp/cases/.../frida/login_observation.js'" > hook.js
 
 # 再执行 spawn 早期注入
@@ -420,13 +420,13 @@ adb forward tcp:27042 tcp:27042
 frida -H 127.0.0.1:27042 -f com.example.app -l hook.js
 ```
 
-也可以让 MCP 生成命令：
+也可以让 MCP 返回命令：
 
 ```bash
 ./scripts/call_tool.sh frida.pc_spawn_command '{"packageName":"com.example.app","scriptName":"hook.js"}'
 ```
 
-#### 本地 helper：生成、拉取、注入、回传结果
+#### 本地 helper：保存、拉取、注入、回传结果
 
 如果要把流程自动串起来，可以使用：
 
@@ -445,7 +445,7 @@ ANDROID_SEC_MCP_TOKEN='<token>' \
 helper 会自动执行：
 
 1. 调用 MCP `frida.prepare_pc_script`，把本地 `hook.js` 保存到移动端 case 目录。
-2. 通过 `adb exec-out su -c "cat <device-js>" > <local-js>` 把移动端生成的 JS 拉回本地。
+2. 通过 `adb exec-out su -c "cat <device-js>" > <local-js>` 把移动端保存的 JS 拉回本地。
 3. 使用 PC 端 `frida` 执行 attach 或 spawn 注入。
 4. 调用 MCP `frida.ingest_pc_result`，把 Frida 输出回传到 MCP session。
 5. 调用 MCP `frida.collect_messages`，输出 MCP 侧汇总结果，方便继续分析。
@@ -459,9 +459,9 @@ export FRIDA_HOST='127.0.0.1:27042'   # 设置后使用 -H，否则默认 -U
 export FRIDA_LOCAL_DIR='build/frida-pc'
 ```
 
-##### 自动反调试检测 + 生成 bypass + 注入
+##### 反调试检测 + bypass 脚本 + 注入
 
-如果要让 MCP 自动扫描 debugger 检测点并生成反调试脚本：
+如果要让 MCP 扫描 debugger 检测点并生成反调试脚本：
 
 ```bash
 ANDROID_SEC_MCP_TOKEN='<token>' \
@@ -478,14 +478,14 @@ ANDROID_SEC_MCP_TOKEN='<token>' \
 该流程会自动执行：
 
 1. MCP `ctf.prepare_debugger_bypass` 扫描 APK 中的 debugger 检测点。
-2. 自动生成 anti-debug Frida JS。
+2. 保存 anti-debug Frida JS。
 3. JS 保存到移动端 case/frida 目录。
 4. adb 导出 JS 到本地。
 5. PC 端执行 Frida spawn/attach 注入。
 6. Frida 输出通过 `frida.ingest_pc_result` 回传 MCP。
 7. MCP 通过 `frida.collect_messages` 汇总结果。
 
-生成的 anti-debug 脚本会尝试处理：
+anti-debug 脚本会尝试处理：
 
 - `android.os.Debug.isDebuggerConnected()`
 - `android.os.Debug.waitingForDebugger()`
@@ -516,12 +516,12 @@ ANDROID_SEC_MCP_TOKEN='<token>' \
 - 常见命名痕迹：`anti_debug` / `antiDebug`
 
 > 该工具属于 bypass 流程，需要配置 `ctfBypassEnabled=true`，目标包名在
-> `allowedBypassPackages` 中，并传入 `confirm=true`。helper 已自动传入
+> `allowedBypassPackages` 中，并传入 `confirm=true`。helper 会传入
 > `confirm=true`。
 
 ## 手动指定 frida-server 路径
 
-如果自动检测结果不符合预期，也可以手动指定：
+如果检测结果不符合预期，也可以手动指定：
 
 ```bash
 adb shell su -c 'grep fridaServerPath /data/adb/android-sec-mcp/config.json'

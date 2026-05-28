@@ -1,6 +1,6 @@
 {
   "name": "emulator-basic",
-  "description": "Template profile placeholder for emulator detection labs. It logs scope and performs no property changes by default.",
+  "description": "Runtime profile for emulator detection labs. It logs scope and performs no property changes by default.",
   "scope": "target-package-runtime",
   "allowedUse": "Only CTF, lab, self-owned apps, or explicitly authorized testing. Never global device patching.",
   "protections": ["emulator_detection"],
@@ -8,7 +8,7 @@
   "actions": [
     {
       "type": "frida_script",
-      "description": "Observation-only placeholder.",
+      "description": "Observation-only action.",
       "script": "log('emulator-basic profile loaded; customize a target-specific app method hook in this JSON if authorized.');"
     }
   ],

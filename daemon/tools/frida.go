@@ -170,7 +170,7 @@ func fridaPreparePCScript(ctx context.Context, env *server.Env, args map[string]
 	sess := env.Sessions.New(pkg, pid)
 	sess.ScriptPath = scriptPath
 	sess.Loaded = false
-	sess.Note = "pc-side mode prepared; export the generated JS with adb, then inject it from PC frida-tools"
+	sess.Note = "pc-side mode prepared; export the JS with adb, then inject it from PC frida-tools"
 	sess.PCMode = server.BuildPCMode(sess, scriptPath, sess.Note)
 	env.Sessions.Put(sess)
 	env.Audit.Log("frida.prepare_pc_script", map[string]any{"sessionId": sess.ID, "packageName": pkg, "pid": pid, "scriptPath": scriptPath})

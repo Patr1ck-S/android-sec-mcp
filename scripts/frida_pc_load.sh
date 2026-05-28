@@ -112,7 +112,7 @@ PY
 
 echo "[*] Session: $SESSION_ID"
 echo "[*] Device script: $DEVICE_SCRIPT"
-echo "[*] Pulling generated JS to: $LOCAL_SCRIPT"
+echo "[*] Pulling JS to: $LOCAL_SCRIPT"
 adb exec-out su -c "cat '$DEVICE_SCRIPT'" > "$LOCAL_SCRIPT"
 
 echo "[*] Ensuring frida-server is running through MCP..."

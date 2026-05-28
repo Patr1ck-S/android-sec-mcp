@@ -28,12 +28,12 @@ type ReportData struct {
 func GenerateReport(path string, d ReportData) error {
 	var b strings.Builder
 	b.WriteString("# " + d.Title + "\n\n")
-	b.WriteString(fmt.Sprintf("- Generated: `%s`\n", time.Now().UTC().Format(time.RFC3339)))
+	b.WriteString(fmt.Sprintf("- Created: `%s`\n", time.Now().UTC().Format(time.RFC3339)))
 	if d.Case != nil {
 		b.WriteString(fmt.Sprintf("- Case ID: `%s`\n- Package: `%s`\n- Case Dir: `%s`\n", d.Case.ID, d.Case.PackageName, d.Case.Root))
 	}
 	b.WriteString("\n## Scope and Authorization\n\n")
-	b.WriteString("This report is generated for authorized Android security research on CTF, lab, self-owned, or explicitly permitted apps. High-risk runtime actions require `confirm=true`.\n\n")
+	b.WriteString("This report is for authorized Android security research on CTF, lab, self-owned, or explicitly permitted apps. High-risk runtime actions require `confirm=true`.\n\n")
 
 	b.WriteString("## Device\n\n")
 	b.WriteString(fenceJSON(d.Device))
@@ -91,7 +91,7 @@ func GenerateReport(path string, d ReportData) error {
 
 	b.WriteString("\n## Findings Summary\n\n")
 	if len(d.Findings) == 0 {
-		b.WriteString("- No findings were automatically asserted; review artifacts manually.\n")
+		b.WriteString("- No findings were asserted; review artifacts manually.\n")
 	}
 	for _, f := range d.Findings {
 		b.WriteString("- " + f + "\n")

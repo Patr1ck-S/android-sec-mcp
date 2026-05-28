@@ -23,14 +23,12 @@ if [ -d "$MODDIR/bypass-profiles" ]; then
   done
 fi
 
-# Wait until Android boot is complete so pm/dumpsys are available.
 for i in $(seq 1 120); do
   [ "$(getprop sys.boot_completed)" = "1" ] && break
   sleep 1
 done
 
-# Prefer an existing frida-server on the device. The module's bundled frida-server
-# may be a placeholder unless the user replaced it before packaging.
+# Prefer an existing frida-server on the device.
 detect_frida() {
   for p in \
     /data/local/tmp/frida-server \
@@ -49,7 +47,6 @@ if [ ! -f "$CONFIG" ]; then
   "$DAEMON" --config "$CONFIG" --print-token >/dev/null 2>&1
 fi
 
-# Best-effort patch fridaServerPath in config without changing token or other fields.
 if [ -f "$CONFIG" ]; then
   if command -v sed >/dev/null 2>&1; then
     sed -i "s#\"fridaServerPath\"[[:space:]]*:[[:space:]]*\"[^\"]*\"#\"fridaServerPath\": \"$FRIDA_PATH\"#" "$CONFIG" 2>/dev/null

@@ -97,7 +97,7 @@ func (e *Env) StartFridaScript(ctx context.Context, sess *FridaSession, scriptPa
 	sess.ScriptPath = scriptPath
 	if e.Config.FridaCliPath == "" {
 		sess.Loaded = false
-		sess.Note = "fridaCliPath is not configured on device; script generated but not loaded. Configure a frida CLI/frida-inject compatible binary to enable runtime loading."
+		sess.Note = "fridaCliPath is not configured on device; script saved but not loaded. Configure a frida CLI/frida-inject compatible binary to enable runtime loading."
 		sess.PCMode = BuildPCMode(sess, scriptPath, sess.Note)
 		e.Sessions.Put(sess)
 		return sess, nil
@@ -163,7 +163,7 @@ func BuildPCMode(sess *FridaSession, scriptPath string, reason string) *PCMode {
 		target = fmt.Sprintf("-n %s", sess.PackageName)
 	}
 	commands := []string{
-		"# 1) Export the generated JS from Android to the PC",
+		"# 1) Export the JS from Android to the PC",
 		fmt.Sprintf("adb exec-out su -c \"cat %s\" > %s", shellQuote(scriptPath), shellQuote(saveAs)),
 		"# If the script path is adb-readable on your device, this may also work:",
 		fmt.Sprintf("adb pull %s %s", shellQuote(scriptPath), shellQuote(saveAs)),
@@ -196,7 +196,7 @@ func BuildPCMode(sess *FridaSession, scriptPath string, reason string) *PCMode {
 		Commands:           commands,
 		Notes: []string{
 			"PC-side mode is intended for the common setup where frida-server runs on Android and frida-tools runs on the PC.",
-			"The script is generated on Android; export it to the PC with the adb command above before running frida.",
+			"Export the script to the PC with the adb command above before running frida.",
 			"Spawn early injection uses `frida -f <package> -l <script>` so the script is loaded before the app starts executing most Java code.",
 			"If the target app restarts, refresh the PID and rerun the frida command.",
 		},

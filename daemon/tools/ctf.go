@@ -172,7 +172,7 @@ func ctfExportBypassReport(ctx context.Context, env *server.Env, args map[string
 	path := filepath.Join(caseDir, "bypass_report.md")
 	md := "# CTF Bypass Mode Report\n\n" +
 		"- Package: `" + pkg + "`\n" +
-		"- Generated: `" + time.Now().UTC().Format(time.RFC3339) + "`\n" +
+		"- Created: `" + time.Now().UTC().Format(time.RFC3339) + "`\n" +
 		"- Scope: target package only; no global device patching.\n" +
 		"- Requirements to apply: `ctfBypassEnabled=true`, package in `allowedBypassPackages`, and `confirm=true`.\n\n" +
 		"```json\n" + mustJSON(planAny) + "\n```\n"
@@ -216,7 +216,7 @@ func ctfPrepareDebuggerBypass(ctx context.Context, env *server.Env, args map[str
 	sess := env.Sessions.New(pkg, pid)
 	sess.ScriptPath = scriptPath
 	sess.Loaded = false
-	sess.Note = "pc-side anti-debug bypass prepared; export the generated JS with adb, then inject it from PC frida-tools"
+	sess.Note = "pc-side anti-debug bypass prepared; export the JS with adb, then inject it from PC frida-tools"
 	sess.PCMode = server.BuildPCMode(sess, scriptPath, sess.Note)
 	env.Sessions.Put(sess)
 	env.Audit.Log("ctf.prepare_debugger_bypass", map[string]any{"sessionId": sess.ID, "packageName": pkg, "pid": pid, "apkPath": apk, "debuggerPoints": len(debugPoints), "scriptPath": scriptPath})
@@ -231,7 +231,7 @@ func ctfPrepareDebuggerBypass(ctx context.Context, env *server.Env, args map[str
 		"pcMode":            sess.PCMode,
 		"recommendedInject": "spawn",
 		"notes": []string{
-			"Generated script hooks android.os.Debug checks, TracerPid reads, libc.ptrace, and syscall(ptrace).",
+			"The script hooks android.os.Debug checks, TracerPid reads, libc.ptrace, and syscall(ptrace).",
 			"Use spawn injection for checks in Application.attachBaseContext/onCreate.",
 		},
 	}, nil

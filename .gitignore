@@ -27,7 +27,7 @@ config.json
 *.p12
 *.mobileprovision
 
-# generated Android/Magisk binaries
+# Android/Magisk build outputs
 magisk/system/bin/android-sec-mcp
 magisk/system/bin/frida-server
 
